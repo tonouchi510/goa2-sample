@@ -10,6 +10,30 @@
   revision = "ee938bf735983d53694d79138ad9820efff94c92"
 
 [[projects]]
+  digest = "1:09d3ceb4456b0b463c5730198a9138e383089b27c0c10b1032789a0618a6dfe6"
+  name = "github.com/dimfeld/httptreemux"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a454a10de4a11f751681a0914461ab9e98c2a3ff"
+  version = "5.0.2"
+
+[[projects]]
+  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
+
+[[projects]]
+  digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
+  version = "v1.4.0"
+
+[[projects]]
   branch = "master"
   digest = "1:393f23e872c9141dbe315c428dc3eac9406f029be7ab0e1cae2374486c07aa54"
   name = "github.com/manveru/faker"
@@ -35,17 +59,20 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a21aa33fd6a8c9883131be50c58dcaa0d284c7d1263df3d3d34dadbc69ea41aa"
+  digest = "1:19a39de8cd89eee295286812509e4764d4186c74c8518e6240c8f22acdae3562"
   name = "goa.design/goa"
   packages = [
+    ".",
     "codegen",
     "codegen/generator",
     "codegen/service",
     "dsl",
     "eval",
     "expr",
+    "http",
     "http/codegen",
     "http/codegen/openapi",
+    "http/middleware",
     "pkg",
   ]
   pruneopts = "UT"
@@ -84,6 +111,14 @@
   revision = "d00ac6d27372a4273825635281f2dc360d4be563"
 
 [[projects]]
+  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  pruneopts = "UT"
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
+
+[[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -95,8 +130,13 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/go-sql-driver/mysql",
+    "goa.design/goa",
     "goa.design/goa/codegen/generator",
     "goa.design/goa/dsl",
+    "goa.design/goa/http",
+    "goa.design/goa/http/middleware",
+    "goa.design/plugins/cors",
     "goa.design/plugins/cors/dsl",
   ]
   solver-name = "gps-cdcl"

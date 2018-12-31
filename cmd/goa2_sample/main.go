@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"flag"
 	"fmt"
 	"log"
@@ -10,6 +11,7 @@ import (
 	"os/signal"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	goa2sample "github.com/tonouchi510/goa2-sample/controllers"
 	swaggersvr "github.com/tonouchi510/goa2-sample/gen/http/swagger/server"
 	userssvr "github.com/tonouchi510/goa2-sample/gen/http/users/server"
@@ -38,12 +40,25 @@ func main() {
 		adapter = middleware.NewLogger(logger)
 	}
 
+	// Initialize service dependencies such as databases.
+	var (
+		db *sql.DB
+	)
+	{
+		var err error
+		db, err = sql.Open("mysql", "test:test@/testdb")
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		defer db.Close()
+	}
+
 	// Create the structs that implement the services.
 	var (
 		usersSvc users.Service
 	)
 	{
-		usersSvc = goa2sample.NewUsers(logger)
+		usersSvc = goa2sample.NewUsers(logger, db)
 	}
 
 	// Wrap the services in endpoints that can be invoked from other

@@ -1,0 +1,4 @@
+.idea/*
+cmd/goa2_sample/goa2_sample
+vendor/*
+.env

@@ -16,3 +16,13 @@ services:
       - "3306:3306"
     volumes:
       - "./docker/mysql:/docker-entrypoint-initdb.d"
+
+  swagger-ui:
+    build:
+      context: .
+      target: swagger-ui
+    ports:
+      - 3000:3000
+    command:
+      sh /usr/share/nginx/run.sh
+

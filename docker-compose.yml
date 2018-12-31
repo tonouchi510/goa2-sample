@@ -26,3 +26,14 @@ services:
     command:
       sh /usr/share/nginx/run.sh
 
+  viron:
+    build:
+      context: .
+      target: viron
+    working_dir: /viron
+    ports:
+      - 8080:8080
+    environment:
+      - SHELL=/bin/bash
+    command: npm run start
+

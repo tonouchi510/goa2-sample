@@ -1,0 +1,300 @@
+swagger: "2.0"
+info:
+  title: SampleAPI
+  description: goa2 sample code.
+  contact:
+    name: tonouchi510
+    email: tonouchi27@gmail.com
+    url: https://github.com/tonouchi510/goa2-sample/issues
+  version: "1.0"
+host: localhost:8000
+consumes:
+- application/json
+- application/xml
+- application/gob
+produces:
+- application/json
+- application/xml
+- application/gob
+paths:
+  /api/v1/users:
+    get:
+      tags:
+      - users
+      summary: list users
+      description: List all stored users
+      operationId: users#list
+      responses:
+        "200":
+          description: OK response.
+          schema:
+            $ref: '#/definitions/UsersStoredUserResponseCollection'
+      schemes:
+      - http
+    post:
+      tags:
+      - users
+      summary: add users
+      description: Add new user and return its ID.
+      operationId: users#add
+      parameters:
+      - name: AddRequestBody
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UsersAddRequestBody'
+          required:
+          - name
+          - email
+      responses:
+        "201":
+          description: Created response.
+          schema:
+            type: integer
+            format: int64
+      schemes:
+      - http
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - users
+      summary: show users
+      description: Show user by ID
+      operationId: users#show
+      parameters:
+      - name: id
+        in: path
+        description: ID of user to show
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: OK response.
+          schema:
+            $ref: '#/definitions/UsersShowResponseBody'
+        "404":
+          description: Not Found response.
+          schema:
+            $ref: '#/definitions/UsersShowNotFoundResponseBody'
+            required:
+            - message
+            - id
+      schemes:
+      - http
+    put:
+      tags:
+      - users
+      summary: update users
+      description: Update user item.
+      operationId: users#update
+      parameters:
+      - name: id
+        in: path
+        description: ID of user to show
+        required: true
+        type: integer
+        format: int64
+      - name: UpdateRequestBody
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UsersUpdateRequestBody'
+      responses:
+        "200":
+          description: OK response.
+          schema:
+            $ref: '#/definitions/UsersUpdateResponseBody'
+      schemes:
+      - http
+    delete:
+      tags:
+      - users
+      summary: remove users
+      description: Remove user from storage
+      operationId: users#remove
+      parameters:
+      - name: id
+        in: path
+        description: ID of user to remove
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "204":
+          description: No Content response.
+      schemes:
+      - http
+  /v1/swagger.json:
+    get:
+      summary: Download ../../gen/http/openapi.json
+      description: JSON document containing the API swagger definition
+      operationId: swagger#/v1/swagger.json
+      responses:
+        "200":
+          description: File downloaded
+          schema:
+            type: file
+      schemes:
+      - http
+definitions:
+  StoredUserResponse:
+    title: 'Mediatype identifier: application/vnd.goa2-sample.stored-user; view=default'
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email of user
+        example: Quia rerum earum tempore.
+      id:
+        type: integer
+        description: ID is the unique id of the user.
+        example: 123
+        format: int64
+      name:
+        type: string
+        description: Name of user
+        example: hoge fuga
+        maxLength: 30
+    description: A StoredUser describes a user access by the storage service. (default
+      view)
+    example:
+      email: Occaecati saepe enim.
+      id: 123
+      name: hoge fuga
+    required:
+    - id
+    - name
+    - email
+  UsersAddRequestBody:
+    title: UsersAddRequestBody
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email of user
+        example: Iure aut eum earum repellat quis incidunt.
+      name:
+        type: string
+        description: Name of user
+        example: hoge fuga
+        maxLength: 30
+    example:
+      email: Et suscipit sit voluptatum quod aliquid.
+      name: hoge fuga
+    required:
+    - name
+    - email
+  UsersShowNotFoundResponseBody:
+    title: UsersShowNotFoundResponseBody
+    type: object
+    properties:
+      id:
+        type: integer
+        description: ID of missing user
+        example: 2729885336329966919
+        format: int64
+      message:
+        type: string
+        description: Message of error
+        example: user 1 not found
+    description: user not found
+    example:
+      id: 6166449330959175920
+      message: user 1 not found
+    required:
+    - message
+    - id
+  UsersShowResponseBody:
+    title: 'Mediatype identifier: application/vnd.goa2-sample.stored-user; view=default'
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email of user
+        example: Nisi tempore.
+      id:
+        type: integer
+        description: ID is the unique id of the user.
+        example: 123
+        format: int64
+      name:
+        type: string
+        description: Name of user
+        example: hoge fuga
+        maxLength: 30
+    description: ShowResponseBody result type (default view)
+    example:
+      email: Qui aut voluptatum.
+      id: 123
+      name: hoge fuga
+    required:
+    - id
+    - name
+    - email
+  UsersStoredUserResponseCollection:
+    title: 'Mediatype identifier: application/vnd.goa2-sample.stored-user; type=collection;
+      view=default'
+    type: array
+    items:
+      $ref: '#/definitions/StoredUserResponse'
+    description: ListResponseBody is the result type for an array of StoredUserResponse
+      (default view)
+    example:
+    - email: Ut illum voluptatem.
+      id: 123
+      name: hoge fuga
+    - email: Ut illum voluptatem.
+      id: 123
+      name: hoge fuga
+    - email: Ut illum voluptatem.
+      id: 123
+      name: hoge fuga
+    - email: Ut illum voluptatem.
+      id: 123
+      name: hoge fuga
+  UsersUpdateRequestBody:
+    title: UsersUpdateRequestBody
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email of user
+        example: Mollitia dignissimos accusantium consequatur est et quod.
+      name:
+        type: string
+        description: Name of user
+        example: Minus magnam vero qui.
+    example:
+      email: In ratione omnis est ipsum.
+      name: Doloremque qui.
+  UsersUpdateResponseBody:
+    title: 'Mediatype identifier: application/vnd.goa2-sample.stored-user; view=default'
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email of user
+        example: Accusamus quo rerum.
+      id:
+        type: integer
+        description: ID is the unique id of the user.
+        example: 123
+        format: int64
+      name:
+        type: string
+        description: Name of user
+        example: hoge fuga
+        maxLength: 30
+    description: UpdateResponseBody result type (default view)
+    example:
+      email: Voluptatem quas quis provident magni.
+      id: 123
+      name: hoge fuga
+    required:
+    - id
+    - name
+    - email
+externalDocs:
+  description: wiki
+  url: https://github.com/tonouchi510/goa2-sample/wiki

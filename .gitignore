@@ -2,3 +2,4 @@
 cmd/goa2_sample/goa2_sample
 vendor/*
 .env
+new_generated/*

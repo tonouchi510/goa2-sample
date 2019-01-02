@@ -1,7 +1,7 @@
 APP_NAME := goa2_sample
 GOP := /Users/masato.tonochi/go/my-project
 REPO := github.com/tonouchi510/goa2-sample
-EXAMPLE_DIR := new_generated
+BACKUP := bak
 ARG = db
 
 # 環境構築
@@ -17,10 +17,11 @@ all: docker-build docker-up run
 # goa関連
 goagen:
 	@goa gen $(REPO)/design
-	@rm -rf $(EXAMPLE_DIR)/*
-	@mv -f controllers/* $(EXAMPLE_DIR)/
-	@goa example $(REPO)/design -o $(EXAMPLE_DIR)
-	@mv -f $(EXAMPLE_DIR)/*.go controllers/
+	@rm -rf $(BACKUP)/*
+	@mv -f cmd bak
+	@mv -f controllers/* ./
+	@goa example $(REPO)/design
+	@mv -f *.go controllers/
 	@find ./controllers/*.go | xargs sed -i '' 's|package goa2sample|package controllers|g'
 	@sed -i '' 's|goa2sample "$(REPO)"|goa2sample "$(REPO)/controllers"|g' cmd/$(APP_NAME)/main.go
 	@sed -i '' 's|swaggersvr.Mount(mux)|swaggersvr.Mount(mux, swaggerServer)|g' cmd/$(APP_NAME)/main.go

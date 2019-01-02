@@ -1,4 +1,4 @@
-package goa2sample
+package controllers
 
 import (
 	"context"

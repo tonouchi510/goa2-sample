@@ -18,7 +18,7 @@ func NewSecured(logger *log.Logger) secured.Service {
 	return &securedSvc{logger}
 }
 
-// Creates a valid JWT token for auth to api.
+// Creates a valid JWT
 func (s *securedSvc) Signin(ctx context.Context, p *secured.SigninPayload) (res *secured.GoaJWT, err error) {
 	res = &secured.GoaJWT{}
 	s.logger.Print("secured.signin")

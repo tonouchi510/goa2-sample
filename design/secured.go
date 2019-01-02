@@ -28,7 +28,7 @@ var _ = Service("secured", func() {
 		Error("unauthorized", String, "Credentials are invalid")
 
 		HTTP(func() {
-			POST("/login")
+			POST("/signin")
 			Response(StatusOK)
 			Response("unauthorized", StatusUnauthorized)
 		})

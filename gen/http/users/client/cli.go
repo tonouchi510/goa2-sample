@@ -37,7 +37,7 @@ func BuildAddPayload(usersAddBody string) (*users.User, error) {
 	{
 		err = json.Unmarshal([]byte(usersAddBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"email\": \"Consequuntur voluptas est quia cum asperiores eius.\",\n      \"name\": \"hoge fuga\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"email\": \"Vel est eius dolorem delectus sit.\",\n      \"name\": \"hoge fuga\"\n   }'")
 		}
 		if utf8.RuneCountInString(body.Name) > 30 {
 			err = goa.MergeErrors(err, goa.InvalidLengthError("body.name", body.Name, utf8.RuneCountInString(body.Name), 30, false))
@@ -64,7 +64,7 @@ func BuildUpdatePayload(usersUpdateBody string, usersUpdateID string) (*users.Up
 	{
 		err = json.Unmarshal([]byte(usersUpdateBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"email\": \"Nulla doloremque sed nulla omnis.\",\n      \"name\": \"Ex excepturi eos perspiciatis sit voluptatem.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, example of valid JSON:\n%s", "'{\n      \"email\": \"Voluptas dolore culpa.\",\n      \"name\": \"Minima ut porro velit nihil.\"\n   }'")
 		}
 	}
 	var id int64

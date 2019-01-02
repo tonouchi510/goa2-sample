@@ -17,6 +17,20 @@ produces:
 - application/xml
 - application/gob
 paths:
+  /api/v1/stats/user_number:
+    get:
+      tags:
+      - stats
+      summary: user_number stats
+      description: Users Information
+      operationId: stats#user_number
+      responses:
+        "200":
+          description: OK response.
+          schema:
+            $ref: '#/definitions/Statsuser_number_response_body'
+      schemes:
+      - http
   /api/v1/users:
     get:
       tags:
@@ -136,7 +150,7 @@ paths:
             type: file
       schemes:
       - http
-  /login:
+  /signin:
     post:
       tags:
       - secured
@@ -204,17 +218,102 @@ definitions:
       Authorization:
         type: string
         description: New Jwt token
-        example: Ratione libero earum corporis quibusdam consequatur.
+        example: Vero pariatur quia similique aut libero.
     description: SigninResponseBody result type (default view)
     example:
-      Authorization: Hic culpa.
+      Authorization: Eaque ratione sint quibusdam animi.
     required:
     - Authorization
   SecuredSigninUnauthorizedResponseBody:
     title: SecuredSigninUnauthorizedResponseBody
     type: string
     description: Credentials are invalid
-    example: Sapiente est similique.
+    example: Sit vel velit.
+  StatsGuideTypeResponseBody:
+    title: StatsGuideTypeResponseBody
+    type: object
+    properties:
+      x:
+        $ref: '#/definitions/StatsLabelTypeResponseBody'
+      "y":
+        $ref: '#/definitions/StatsLabelTypeResponseBody'
+    example:
+      x:
+        label: Qui modi rem.
+      "y":
+        label: Qui modi rem.
+  StatsLabelTypeResponseBody:
+    title: StatsLabelTypeResponseBody
+    type: object
+    properties:
+      label:
+        type: string
+        example: Similique voluptatem fuga praesentium.
+    example:
+      label: Explicabo eos expedita.
+    required:
+    - label
+  Statsuser_number_response_body:
+    title: 'Mediatype identifier: application/vnd.statsuser+json; view=default'
+    type: object
+    properties:
+      color:
+        type: string
+        description: ドットの色分けに使用するkey
+        example: Dolor qui perspiciatis dolores voluptatum.
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/dataResponseBody'
+        description: グラフデータ
+        example:
+        - key: Voluptatem earum nulla.
+          value: Sed nulla omnis.
+        - key: Voluptatem earum nulla.
+          value: Sed nulla omnis.
+        - key: Voluptatem earum nulla.
+          value: Sed nulla omnis.
+        - key: Voluptatem earum nulla.
+          value: Sed nulla omnis.
+      guide:
+        $ref: '#/definitions/StatsGuideTypeResponseBody'
+      size:
+        type: string
+        description: ドットの大きさに使用するkey
+        example: Ut minus inventore esse ea nemo.
+      x:
+        type: string
+        description: X軸に使用するkey
+        example: Ducimus provident exercitationem excepturi necessitatibus quo hic.
+      "y":
+        type: string
+        description: Y軸に使用するkey
+        example: Ad deserunt.
+    description: user_number_response_body result type (default view)
+    example:
+      color: Distinctio eius id non quidem quasi.
+      data:
+      - key: Voluptatem earum nulla.
+        value: Sed nulla omnis.
+      - key: Voluptatem earum nulla.
+        value: Sed nulla omnis.
+      - key: Voluptatem earum nulla.
+        value: Sed nulla omnis.
+      - key: Voluptatem earum nulla.
+        value: Sed nulla omnis.
+      guide:
+        x:
+          label: Qui modi rem.
+        "y":
+          label: Qui modi rem.
+      size: Quia beatae sequi nihil.
+      x: Totam odit quia.
+      "y": Repellendus quam dolores ea id.
+    required:
+    - data
+    - x
+    - "y"
+    - guide
   StoredUserResponse:
     title: 'Mediatype identifier: application/vnd.goa2-sample.stored-user; view=default'
     type: object
@@ -222,7 +321,7 @@ definitions:
       email:
         type: string
         description: Email of user
-        example: Velit quia dolorem enim.
+        example: Vero voluptas.
       id:
         type: integer
         description: ID is the unique id of the user.
@@ -236,7 +335,7 @@ definitions:
     description: A StoredUser describes a user access by the storage service. (default
       view)
     example:
-      email: Molestiae nisi repellendus odit incidunt.
+      email: Alias explicabo atque.
       id: 123
       name: hoge fuga
     required:
@@ -250,14 +349,14 @@ definitions:
       email:
         type: string
         description: Email of user
-        example: Ut non et repellendus vel nemo architecto.
+        example: Accusamus aut quas eum natus.
       name:
         type: string
         description: Name of user
         example: hoge fuga
         maxLength: 30
     example:
-      email: Dolor numquam exercitationem maxime.
+      email: Delectus molestiae nihil.
       name: hoge fuga
     required:
     - name
@@ -269,7 +368,7 @@ definitions:
       id:
         type: integer
         description: ID of missing user
-        example: 1512959019589870870
+        example: 1409182947344963041
         format: int64
       message:
         type: string
@@ -277,7 +376,7 @@ definitions:
         example: user 1 not found
     description: user not found
     example:
-      id: 5886602113380670684
+      id: 3809958565687440347
       message: user 1 not found
     required:
     - message
@@ -289,7 +388,7 @@ definitions:
       email:
         type: string
         description: Email of user
-        example: Quis ratione velit maxime.
+        example: Dolorem hic repellat quia officiis aliquid.
       id:
         type: integer
         description: ID is the unique id of the user.
@@ -302,7 +401,7 @@ definitions:
         maxLength: 30
     description: ShowResponseBody result type (default view)
     example:
-      email: Sint magnam est accusamus.
+      email: Deserunt mollitia reprehenderit.
       id: 123
       name: hoge fuga
     required:
@@ -318,16 +417,16 @@ definitions:
     description: ListResponseBody is the result type for an array of StoredUserResponse
       (default view)
     example:
-    - email: Vero quas.
+    - email: Exercitationem voluptatibus molestias.
       id: 123
       name: hoge fuga
-    - email: Vero quas.
+    - email: Exercitationem voluptatibus molestias.
       id: 123
       name: hoge fuga
-    - email: Vero quas.
+    - email: Exercitationem voluptatibus molestias.
       id: 123
       name: hoge fuga
-    - email: Vero quas.
+    - email: Exercitationem voluptatibus molestias.
       id: 123
       name: hoge fuga
   UsersUpdateRequestBody:
@@ -337,14 +436,14 @@ definitions:
       email:
         type: string
         description: Email of user
-        example: Eos magnam dolores omnis dolor occaecati.
+        example: Deleniti delectus necessitatibus iure.
       name:
         type: string
         description: Name of user
-        example: Distinctio nostrum debitis.
+        example: Dolores dicta.
     example:
-      email: Officiis repellat dolorem.
-      name: Consequatur ea et aperiam ipsum.
+      email: Sit enim voluptatem possimus autem inventore velit.
+      name: Magni consectetur deleniti et.
   UsersUpdateResponseBody:
     title: 'Mediatype identifier: application/vnd.goa2-sample.stored-user; view=default'
     type: object
@@ -352,7 +451,7 @@ definitions:
       email:
         type: string
         description: Email of user
-        example: Sed tenetur eum eos est dolor iste.
+        example: Assumenda autem.
       id:
         type: integer
         description: ID is the unique id of the user.
@@ -365,7 +464,7 @@ definitions:
         maxLength: 30
     description: UpdateResponseBody result type (default view)
     example:
-      email: Consequatur quod odit ut qui.
+      email: Cum adipisci unde.
       id: 123
       name: hoge fuga
     required:
@@ -378,13 +477,13 @@ definitions:
     properties:
       method:
         type: string
-        example: Autem mollitia cum adipisci.
+        example: Ad ut minima rerum.
       path:
         type: string
-        example: Vero dolores dicta.
+        example: Illo dolor.
     example:
-      method: Deleniti delectus necessitatibus iure.
-      path: Magni consectetur deleniti et.
+      method: At occaecati aut rerum impedit.
+      path: Possimus eum reprehenderit.
     required:
     - method
     - path
@@ -395,25 +494,25 @@ definitions:
       method:
         type: string
         description: request method to submit this auth
-        example: Quam maxime non accusamus.
+        example: Laborum accusantium repellendus cum.
       provider:
         type: string
         description: provider name
-        example: Fugit et atque.
+        example: Quis doloribus placeat delectus sequi cumque.
       type:
         type: string
         description: type name
-        example: Ipsum optio nisi placeat eum odit unde.
+        example: Quod fuga corporis atque.
       url:
         type: string
         description: url
-        example: Vitae error libero illo quis ad.
+        example: Velit maxime possimus voluptates eos qui.
     description: Viron_authtypeResponse result type (default view)
     example:
-      method: Qui nemo eum quas inventore nulla numquam.
-      provider: Atque sed.
-      type: Alias id magnam quaerat quia.
-      url: Maiores ea dicta maiores id nobis.
+      method: Fugit aut voluptate eum culpa earum pariatur.
+      provider: Iste fugiat.
+      type: Ut inventore quia quam laboriosam iure excepturi.
+      url: Fugiat molestias architecto facere voluptatem.
     required:
     - type
     - provider
@@ -427,41 +526,40 @@ definitions:
         type: array
         items:
           type: string
-          example: Alias explicabo atque.
+          example: Sunt quod.
         example:
-        - Dolorem hic repellat quia officiis aliquid.
-        - Deserunt mollitia reprehenderit.
-        - Fuga accusantium accusamus aut.
-        - Eum natus aut delectus molestiae nihil et.
+        - Ut accusantium officia.
+        - Ut ut dolores asperiores est.
+        - Et vel quia officia ex.
       api:
         $ref: '#/definitions/Viron_apiResponseBody'
       auto_refresh_sec:
         type: integer
-        example: 89164987
+        example: 1032020777
         format: int32
       name:
         type: string
-        example: Eius id non quidem.
+        example: Similique optio.
       pagination:
         type: boolean
-        example: false
+        example: true
       primary:
         type: string
-        example: Enim voluptatem possimus.
+        example: Labore inventore et.
       query:
         type: array
         items:
           $ref: '#/definitions/Viron_queryResponseBody'
         example:
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
       style:
         type: string
-        example: graph-stacked-bar
+        example: graph-stacked-area
         enum:
         - number
         - table
@@ -476,39 +574,37 @@ definitions:
         type: array
         items:
           type: string
-          example: Inventore velit et quod fuga.
+          example: Voluptatem animi iusto aut repellendus architecto accusamus.
         example:
-        - Vel quis doloribus placeat delectus.
-        - Cumque qui velit maxime possimus voluptates eos.
-        - Voluptatem laborum accusantium repellendus cum ea.
+        - Ratione libero earum corporis quibusdam consequatur.
+        - Hic culpa.
+        - Sapiente est similique.
       unit:
         type: string
-        example: Vero voluptas.
+        example: Reprehenderit corporis quia.
     example:
       actions:
-      - Officiis voluptas error et veniam cum eaque.
-      - Quo sit eius saepe ut tenetur ut.
+      - Ut beatae eaque est quis nisi nihil.
+      - Rerum sunt aspernatur.
       api:
-        method: Quia doloremque.
-        path: Quidem fugit in modi.
-      auto_refresh_sec: 267413078
-      name: Fugit aut voluptate eum culpa earum pariatur.
-      pagination: true
-      primary: Harum tenetur omnis.
+        method: Nisi quia optio quae.
+        path: Sapiente dolorem et temporibus sed.
+      auto_refresh_sec: 308021576
+      name: Labore ipsam impedit quia modi.
+      pagination: false
+      primary: Vitae sed.
       query:
-      - key: Quia omnis ratione cum quo.
-        type: Error rem aut qui.
-      - key: Quia omnis ratione cum quo.
-        type: Error rem aut qui.
-      - key: Quia omnis ratione cum quo.
-        type: Error rem aut qui.
+      - key: Nulla adipisci.
+        type: Nisi culpa et at deserunt aut.
+      - key: Nulla adipisci.
+        type: Nisi culpa et at deserunt aut.
       style: graph-line
       table_labels:
-      - Explicabo eaque est est.
-      - Ratione quia maxime consectetur.
-      - Asperiores error quia amet.
-      - Error molestiae.
-      unit: Ea adipisci.
+      - Sed placeat eius maiores voluptas.
+      - Sapiente earum.
+      - Dolor ea magni earum pariatur.
+      - Dolore iusto tempora quaerat.
+      unit: Sed similique.
     required:
     - name
     - style
@@ -523,119 +619,177 @@ definitions:
           $ref: '#/definitions/Viron_componentResponseBody'
         example:
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
+        - actions:
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
+          api:
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
+          pagination: false
+          primary: Dolorem quos pariatur.
+          query:
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
+          table_labels:
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
+        - actions:
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
+          api:
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
+          pagination: false
+          primary: Dolorem quos pariatur.
+          query:
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
+          table_labels:
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
       group:
         type: string
-        example: Eos totam odit quia laboriosam repellendus.
+        example: Aliquam odit non sint et ratione neque.
       id:
         type: string
-        example: Dolores ea id repudiandae.
+        example: Nihil aut laboriosam.
       name:
         type: string
-        example: Beatae sequi nihil officiis.
+        example: Natus voluptas est quis.
       section:
         type: string
-        example: Explicabo eos expedita.
+        example: Quia amet reiciendis error.
     example:
       components:
       - actions:
-        - Vel velit quia minima ut.
-        - Velit nihil molestiae.
-        - Dolore culpa ducimus qui repellat eaque.
-        - Autem sunt ducimus et quia distinctio.
+        - Tenetur voluptatem.
+        - Mollitia sapiente doloremque molestiae.
         api:
-          method: Quia doloremque.
-          path: Quidem fugit in modi.
-        auto_refresh_sec: 1289422201
-        name: Pariatur officiis est aut.
+          method: Nisi quia optio quae.
+          path: Sapiente dolorem et temporibus sed.
+        auto_refresh_sec: 1595381535
+        name: Atque reiciendis quia omnis nisi.
         pagination: false
-        primary: Adipisci error.
+        primary: Dolorem quos pariatur.
         query:
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        style: graph-horizontal-stacked-bar
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        style: table
         table_labels:
-        - Est sit fuga similique sit recusandae fugit.
-        - Laudantium at qui sunt ut voluptate.
-        unit: Eveniet vel est eius dolorem delectus.
+        - Itaque consequuntur voluptatum ab iure.
+        - Quod porro beatae eum eius itaque.
+        - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+        - Voluptatem rerum sed suscipit aut.
+        unit: Dicta voluptatem.
       - actions:
-        - Vel velit quia minima ut.
-        - Velit nihil molestiae.
-        - Dolore culpa ducimus qui repellat eaque.
-        - Autem sunt ducimus et quia distinctio.
+        - Tenetur voluptatem.
+        - Mollitia sapiente doloremque molestiae.
         api:
-          method: Quia doloremque.
-          path: Quidem fugit in modi.
-        auto_refresh_sec: 1289422201
-        name: Pariatur officiis est aut.
+          method: Nisi quia optio quae.
+          path: Sapiente dolorem et temporibus sed.
+        auto_refresh_sec: 1595381535
+        name: Atque reiciendis quia omnis nisi.
         pagination: false
-        primary: Adipisci error.
+        primary: Dolorem quos pariatur.
         query:
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        - key: Quia omnis ratione cum quo.
-          type: Error rem aut qui.
-        style: graph-horizontal-stacked-bar
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        style: table
         table_labels:
-        - Est sit fuga similique sit recusandae fugit.
-        - Laudantium at qui sunt ut voluptate.
-        unit: Eveniet vel est eius dolorem delectus.
-      group: Laboriosam voluptatem natus voluptas est quis tenetur.
-      id: Optio voluptas.
-      name: Reprehenderit corporis quia.
-      section: Et ratione neque molestiae nihil.
+        - Itaque consequuntur voluptatum ab iure.
+        - Quod porro beatae eum eius itaque.
+        - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+        - Voluptatem rerum sed suscipit aut.
+        unit: Dicta voluptatem.
+      - actions:
+        - Tenetur voluptatem.
+        - Mollitia sapiente doloremque molestiae.
+        api:
+          method: Nisi quia optio quae.
+          path: Sapiente dolorem et temporibus sed.
+        auto_refresh_sec: 1595381535
+        name: Atque reiciendis quia omnis nisi.
+        pagination: false
+        primary: Dolorem quos pariatur.
+        query:
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        - key: Nulla adipisci.
+          type: Nisi culpa et at deserunt aut.
+        style: table
+        table_labels:
+        - Itaque consequuntur voluptatum ab iure.
+        - Quod porro beatae eum eius itaque.
+        - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+        - Voluptatem rerum sed suscipit aut.
+        unit: Dicta voluptatem.
+      group: Repellat ipsum distinctio.
+      id: Minus non nemo.
+      name: Placeat omnis quasi odit commodi voluptate.
+      section: Temporibus culpa ut.
     required:
     - id
     - name
@@ -647,13 +801,13 @@ definitions:
     properties:
       key:
         type: string
-        example: Inventore quia quam laboriosam.
+        example: Delectus et quis dolor ut eum.
       type:
         type: string
-        example: Excepturi nesciunt.
+        example: Explicabo repellendus voluptatem mollitia ullam.
     example:
-      key: Fugiat et.
-      type: Molestias architecto.
+      key: Ut in nihil officia.
+      type: Ab amet quibusdam non quod ducimus laboriosam.
     required:
     - key
     - type
@@ -666,21 +820,25 @@ definitions:
     description: AuthtypeResponseBody is the result type for an array of Viron_authtypeResponse
       (default view)
     example:
-    - method: Voluptate qui temporibus nihil temporibus consequatur.
-      provider: Ipsa dolorem cupiditate nobis numquam possimus suscipit.
-      type: Dolor quo sequi.
-      url: Ullam omnis esse inventore laudantium doloremque debitis.
-    - method: Voluptate qui temporibus nihil temporibus consequatur.
-      provider: Ipsa dolorem cupiditate nobis numquam possimus suscipit.
-      type: Dolor quo sequi.
-      url: Ullam omnis esse inventore laudantium doloremque debitis.
+    - method: Sit fuga.
+      provider: Accusamus quia doloremque odit quidem fugit in.
+      type: Ducimus et quia.
+      url: Dolorum delectus adipisci error est nobis.
+    - method: Sit fuga.
+      provider: Accusamus quia doloremque odit quidem fugit in.
+      type: Ducimus et quia.
+      url: Dolorum delectus adipisci error est nobis.
+    - method: Sit fuga.
+      provider: Accusamus quia doloremque odit quidem fugit in.
+      type: Ducimus et quia.
+      url: Dolorum delectus adipisci error est nobis.
   Vironviron_menu_response_body:
     title: 'Mediatype identifier: vnd.application/viron_menu+json; view=default'
     type: object
     properties:
       color:
         type: string
-        example: green
+        example: blue
         enum:
         - purple
         - blue
@@ -692,7 +850,7 @@ definitions:
         - white
       name:
         type: string
-        example: Eum porro voluptate.
+        example: Ea adipisci.
       pages:
         type: array
         items:
@@ -700,216 +858,292 @@ definitions:
         example:
         - components:
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
-          group: Quidem ducimus similique.
-          id: Sunt ducimus reprehenderit vel exercitationem voluptatibus molestias.
-          name: Nesciunt ex rerum est aperiam ex.
-          section: Doloremque sed ipsa unde ut rem.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
+          group: Eligendi praesentium consequatur aperiam sint.
+          id: Ea quia mollitia consequuntur consequatur velit non.
+          name: Rerum consequatur reiciendis aut aut.
+          section: Sint quasi ut neque est.
         - components:
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
           - actions:
-            - Vel velit quia minima ut.
-            - Velit nihil molestiae.
-            - Dolore culpa ducimus qui repellat eaque.
-            - Autem sunt ducimus et quia distinctio.
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
             api:
-              method: Quia doloremque.
-              path: Quidem fugit in modi.
-            auto_refresh_sec: 1289422201
-            name: Pariatur officiis est aut.
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
             pagination: false
-            primary: Adipisci error.
+            primary: Dolorem quos pariatur.
             query:
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            - key: Quia omnis ratione cum quo.
-              type: Error rem aut qui.
-            style: graph-horizontal-stacked-bar
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
             table_labels:
-            - Est sit fuga similique sit recusandae fugit.
-            - Laudantium at qui sunt ut voluptate.
-            unit: Eveniet vel est eius dolorem delectus.
-          group: Quidem ducimus similique.
-          id: Sunt ducimus reprehenderit vel exercitationem voluptatibus molestias.
-          name: Nesciunt ex rerum est aperiam ex.
-          section: Doloremque sed ipsa unde ut rem.
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
+          group: Eligendi praesentium consequatur aperiam sint.
+          id: Ea quia mollitia consequuntur consequatur velit non.
+          name: Rerum consequatur reiciendis aut aut.
+          section: Sint quasi ut neque est.
+        - components:
+          - actions:
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
+            api:
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
+            pagination: false
+            primary: Dolorem quos pariatur.
+            query:
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
+            table_labels:
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
+          - actions:
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
+            api:
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
+            pagination: false
+            primary: Dolorem quos pariatur.
+            query:
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
+            table_labels:
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
+          - actions:
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
+            api:
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
+            pagination: false
+            primary: Dolorem quos pariatur.
+            query:
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
+            table_labels:
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
+          - actions:
+            - Tenetur voluptatem.
+            - Mollitia sapiente doloremque molestiae.
+            api:
+              method: Nisi quia optio quae.
+              path: Sapiente dolorem et temporibus sed.
+            auto_refresh_sec: 1595381535
+            name: Atque reiciendis quia omnis nisi.
+            pagination: false
+            primary: Dolorem quos pariatur.
+            query:
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            - key: Nulla adipisci.
+              type: Nisi culpa et at deserunt aut.
+            style: table
+            table_labels:
+            - Itaque consequuntur voluptatum ab iure.
+            - Quod porro beatae eum eius itaque.
+            - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+            - Voluptatem rerum sed suscipit aut.
+            unit: Dicta voluptatem.
+          group: Eligendi praesentium consequatur aperiam sint.
+          id: Ea quia mollitia consequuntur consequatur velit non.
+          name: Rerum consequatur reiciendis aut aut.
+          section: Sint quasi ut neque est.
       tags:
         type: array
         items:
           type: string
-          example: Facilis vero hic ducimus provident exercitationem.
+          example: Cum eaque debitis quo sit eius.
         example:
-        - Quo hic placeat ad.
-        - Voluptas ut.
-        - Inventore esse ea nemo fugiat dolor qui.
-        - Dolores voluptatum sed similique voluptatem.
+        - Tenetur ut doloribus natus harum tenetur.
+        - Excepturi magni explicabo eaque est est.
+        - Ratione quia maxime consectetur.
       theme:
         type: string
         example: terminal
@@ -919,325 +1153,313 @@ definitions:
         - terminal
       thumbnail:
         type: string
-        example: Molestias dolor doloremque repudiandae.
+        example: Quas officiis voluptas error et.
     description: viron_menu_response_body result type (default view)
     example:
       color: gray
-      name: Deleniti eligendi ut accusantium officia molestias.
+      name: Mollitia quasi.
       pages:
       - components:
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
-        group: Quidem ducimus similique.
-        id: Sunt ducimus reprehenderit vel exercitationem voluptatibus molestias.
-        name: Nesciunt ex rerum est aperiam ex.
-        section: Doloremque sed ipsa unde ut rem.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
+        group: Eligendi praesentium consequatur aperiam sint.
+        id: Ea quia mollitia consequuntur consequatur velit non.
+        name: Rerum consequatur reiciendis aut aut.
+        section: Sint quasi ut neque est.
       - components:
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
-        group: Quidem ducimus similique.
-        id: Sunt ducimus reprehenderit vel exercitationem voluptatibus molestias.
-        name: Nesciunt ex rerum est aperiam ex.
-        section: Doloremque sed ipsa unde ut rem.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
+        group: Eligendi praesentium consequatur aperiam sint.
+        id: Ea quia mollitia consequuntur consequatur velit non.
+        name: Rerum consequatur reiciendis aut aut.
+        section: Sint quasi ut neque est.
       - components:
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
         - actions:
-          - Vel velit quia minima ut.
-          - Velit nihil molestiae.
-          - Dolore culpa ducimus qui repellat eaque.
-          - Autem sunt ducimus et quia distinctio.
+          - Tenetur voluptatem.
+          - Mollitia sapiente doloremque molestiae.
           api:
-            method: Quia doloremque.
-            path: Quidem fugit in modi.
-          auto_refresh_sec: 1289422201
-          name: Pariatur officiis est aut.
+            method: Nisi quia optio quae.
+            path: Sapiente dolorem et temporibus sed.
+          auto_refresh_sec: 1595381535
+          name: Atque reiciendis quia omnis nisi.
           pagination: false
-          primary: Adipisci error.
+          primary: Dolorem quos pariatur.
           query:
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          - key: Quia omnis ratione cum quo.
-            type: Error rem aut qui.
-          style: graph-horizontal-stacked-bar
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          - key: Nulla adipisci.
+            type: Nisi culpa et at deserunt aut.
+          style: table
           table_labels:
-          - Est sit fuga similique sit recusandae fugit.
-          - Laudantium at qui sunt ut voluptate.
-          unit: Eveniet vel est eius dolorem delectus.
-        group: Quidem ducimus similique.
-        id: Sunt ducimus reprehenderit vel exercitationem voluptatibus molestias.
-        name: Nesciunt ex rerum est aperiam ex.
-        section: Doloremque sed ipsa unde ut rem.
+          - Itaque consequuntur voluptatum ab iure.
+          - Quod porro beatae eum eius itaque.
+          - Fugit et omnis voluptatibus quibusdam necessitatibus quae.
+          - Voluptatem rerum sed suscipit aut.
+          unit: Dicta voluptatem.
+        group: Eligendi praesentium consequatur aperiam sint.
+        id: Ea quia mollitia consequuntur consequatur velit non.
+        name: Rerum consequatur reiciendis aut aut.
+        section: Sint quasi ut neque est.
       tags:
-      - Ex vitae ad ut minima rerum occaecati.
-      - Dolor perferendis at occaecati aut rerum.
-      - Dolorum possimus eum reprehenderit laborum sit labore.
-      - Et et voluptatem animi iusto aut repellendus.
+      - Reiciendis aut cum.
+      - Quis et reprehenderit consequuntur voluptatem.
+      - Nostrum qui.
+      - Aut id consequatur praesentium ratione iusto cum.
       theme: midnight
-      thumbnail: Ut dolores asperiores est perspiciatis et vel.
+      thumbnail: Iure iure facere totam a consequuntur.
     required:
     - name
     - pages
+  dataResponseBody:
+    title: dataResponseBody
+    type: object
+    properties:
+      key:
+        type: string
+        example: Ea dicta maiores id.
+      value:
+        example: Hic qui nemo eum quas inventore nulla.
+    example:
+      key: Commodi qui eum porro.
+      value: At molestias dolor doloremque repudiandae facilis facilis.
 securityDefinitions:
   basic:
     type: basic

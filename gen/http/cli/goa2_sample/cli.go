@@ -14,6 +14,7 @@ import (
 	"os"
 
 	securedc "github.com/tonouchi510/goa2-sample/gen/http/secured/client"
+	statsc "github.com/tonouchi510/goa2-sample/gen/http/stats/client"
 	usersc "github.com/tonouchi510/goa2-sample/gen/http/users/client"
 	vironc "github.com/tonouchi510/goa2-sample/gen/http/viron/client"
 	goa "goa.design/goa"
@@ -25,7 +26,8 @@ import (
 //    command (subcommand1|subcommand2|...)
 //
 func UsageCommands() string {
-	return `users (list|show|add|update|remove)
+	return `stats user-number
+users (list|show|add|update|remove)
 viron (authtype|viron-menu)
 secured signin
 `
@@ -33,7 +35,8 @@ secured signin
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` users list` + "\n" +
+	return os.Args[0] + ` stats user-number` + "\n" +
+		os.Args[0] + ` users list` + "\n" +
 		os.Args[0] + ` viron authtype` + "\n" +
 		os.Args[0] + ` secured signin --username "user" --password "password"` + "\n" +
 		""
@@ -49,6 +52,10 @@ func ParseEndpoint(
 	restore bool,
 ) (goa.Endpoint, interface{}, error) {
 	var (
+		statsFlags = flag.NewFlagSet("stats", flag.ContinueOnError)
+
+		statsUserNumberFlags = flag.NewFlagSet("user-number", flag.ExitOnError)
+
 		usersFlags = flag.NewFlagSet("users", flag.ContinueOnError)
 
 		usersListFlags = flag.NewFlagSet("list", flag.ExitOnError)
@@ -78,6 +85,9 @@ func ParseEndpoint(
 		securedSigninUsernameFlag = securedSigninFlags.String("username", "REQUIRED", "Username used to perform signin")
 		securedSigninPasswordFlag = securedSigninFlags.String("password", "REQUIRED", "Password used to perform signin")
 	)
+	statsFlags.Usage = statsUsage
+	statsUserNumberFlags.Usage = statsUserNumberUsage
+
 	usersFlags.Usage = usersUsage
 	usersListFlags.Usage = usersListUsage
 	usersShowFlags.Usage = usersShowUsage
@@ -107,6 +117,8 @@ func ParseEndpoint(
 	{
 		svcn = os.Args[1+flag.NFlag()]
 		switch svcn {
+		case "stats":
+			svcf = statsFlags
 		case "users":
 			svcf = usersFlags
 		case "viron":
@@ -128,6 +140,13 @@ func ParseEndpoint(
 	{
 		epn = os.Args[2+flag.NFlag()+svcf.NFlag()]
 		switch svcn {
+		case "stats":
+			switch epn {
+			case "user-number":
+				epf = statsUserNumberFlags
+
+			}
+
 		case "users":
 			switch epn {
 			case "list":
@@ -184,6 +203,13 @@ func ParseEndpoint(
 	)
 	{
 		switch svcn {
+		case "stats":
+			c := statsc.NewClient(scheme, host, doer, enc, dec, restore)
+			switch epn {
+			case "user-number":
+				endpoint = c.UserNumber()
+				data = nil
+			}
 		case "users":
 			c := usersc.NewClient(scheme, host, doer, enc, dec, restore)
 			switch epn {
@@ -229,6 +255,29 @@ func ParseEndpoint(
 	return endpoint, data, nil
 }
 
+// statsUsage displays the usage of the stats command and its subcommands.
+func statsUsage() {
+	fmt.Fprintf(os.Stderr, `Stats describes stats information of this services
+Usage:
+    %s [globalflags] stats COMMAND [flags]
+
+COMMAND:
+    user-number: Users Information
+
+Additional help:
+    %s stats COMMAND --help
+`, os.Args[0], os.Args[0])
+}
+func statsUserNumberUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] stats user-number
+
+Users Information
+
+Example:
+    `+os.Args[0]+` stats user-number
+`, os.Args[0])
+}
+
 // usersUsage displays the usage of the users command and its subcommands.
 func usersUsage() {
 	fmt.Fprintf(os.Stderr, `users serves user relative information.
@@ -263,7 +312,7 @@ Show user by ID
     -id INT64: ID of user to show
 
 Example:
-    `+os.Args[0]+` users show --id 5539764536154362935
+    `+os.Args[0]+` users show --id 8884525023437309669
 `, os.Args[0])
 }
 
@@ -275,7 +324,7 @@ Add new user and return its ID.
 
 Example:
     `+os.Args[0]+` users add --body '{
-      "email": "Consequuntur voluptas est quia cum asperiores eius.",
+      "email": "Vel est eius dolorem delectus sit.",
       "name": "hoge fuga"
    }'
 `, os.Args[0])
@@ -290,9 +339,9 @@ Update user item.
 
 Example:
     `+os.Args[0]+` users update --body '{
-      "email": "Nulla doloremque sed nulla omnis.",
-      "name": "Ex excepturi eos perspiciatis sit voluptatem."
-   }' --id 2376229461744035771
+      "email": "Voluptas dolore culpa.",
+      "name": "Minima ut porro velit nihil."
+   }' --id 4273093035653800417
 `, os.Args[0])
 }
 
@@ -303,7 +352,7 @@ Remove user from storage
     -id INT64: ID of user to remove
 
 Example:
-    `+os.Args[0]+` users remove --id 609566757397897271
+    `+os.Args[0]+` users remove --id 770662433331218172
 `, os.Args[0])
 }
 

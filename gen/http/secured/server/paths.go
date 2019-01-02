@@ -9,5 +9,5 @@ package server
 
 // SigninSecuredPath returns the URL path to the secured service signin HTTP endpoint.
 func SigninSecuredPath() string {
-	return "/login"
+	return "/signin"
 }

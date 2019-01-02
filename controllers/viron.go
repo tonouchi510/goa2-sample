@@ -58,6 +58,21 @@ func (s *vironSvc) VironMenu(ctx context.Context) (res *viron.VironMenu, err err
 		Theme: &th,
 		Pages: []*viron.VironPage{
 			&viron.VironPage{
+				Section:    "dashboard",
+				Name:       "ダッシュボード",
+				ID:         "quickview",
+				Components: []*viron.VironComponent{
+					&viron.VironComponent{
+						Name:    "Users(bar)",
+						API: &viron.VironAPI{
+							Method: "get",
+							Path:   "/api/v1/stats/user_number",
+						},
+						Style: "graph-bar",
+					},
+				},
+			},
+			&viron.VironPage{
 				Section: "manage",
 				ID:      "user-admin",
 				Name:    "ユーザ管理",

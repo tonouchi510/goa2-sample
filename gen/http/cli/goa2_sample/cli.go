@@ -13,7 +13,9 @@ import (
 	"net/http"
 	"os"
 
+	securedc "github.com/tonouchi510/goa2-sample/gen/http/secured/client"
 	usersc "github.com/tonouchi510/goa2-sample/gen/http/users/client"
+	vironc "github.com/tonouchi510/goa2-sample/gen/http/viron/client"
 	goa "goa.design/goa"
 	goahttp "goa.design/goa/http"
 )
@@ -24,12 +26,16 @@ import (
 //
 func UsageCommands() string {
 	return `users (list|show|add|update|remove)
+viron (authtype|viron-menu)
+secured signin
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` users list` + "\n" +
+		os.Args[0] + ` viron authtype` + "\n" +
+		os.Args[0] + ` secured signin --username "user" --password "password"` + "\n" +
 		""
 }
 
@@ -59,6 +65,18 @@ func ParseEndpoint(
 
 		usersRemoveFlags  = flag.NewFlagSet("remove", flag.ExitOnError)
 		usersRemoveIDFlag = usersRemoveFlags.String("id", "REQUIRED", "ID of user to remove")
+
+		vironFlags = flag.NewFlagSet("viron", flag.ContinueOnError)
+
+		vironAuthtypeFlags = flag.NewFlagSet("authtype", flag.ExitOnError)
+
+		vironVironMenuFlags = flag.NewFlagSet("viron-menu", flag.ExitOnError)
+
+		securedFlags = flag.NewFlagSet("secured", flag.ContinueOnError)
+
+		securedSigninFlags        = flag.NewFlagSet("signin", flag.ExitOnError)
+		securedSigninUsernameFlag = securedSigninFlags.String("username", "REQUIRED", "Username used to perform signin")
+		securedSigninPasswordFlag = securedSigninFlags.String("password", "REQUIRED", "Password used to perform signin")
 	)
 	usersFlags.Usage = usersUsage
 	usersListFlags.Usage = usersListUsage
@@ -66,6 +84,13 @@ func ParseEndpoint(
 	usersAddFlags.Usage = usersAddUsage
 	usersUpdateFlags.Usage = usersUpdateUsage
 	usersRemoveFlags.Usage = usersRemoveUsage
+
+	vironFlags.Usage = vironUsage
+	vironAuthtypeFlags.Usage = vironAuthtypeUsage
+	vironVironMenuFlags.Usage = vironVironMenuUsage
+
+	securedFlags.Usage = securedUsage
+	securedSigninFlags.Usage = securedSigninUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -84,6 +109,10 @@ func ParseEndpoint(
 		switch svcn {
 		case "users":
 			svcf = usersFlags
+		case "viron":
+			svcf = vironFlags
+		case "secured":
+			svcf = securedFlags
 		default:
 			return nil, nil, fmt.Errorf("unknown service %q", svcn)
 		}
@@ -115,6 +144,23 @@ func ParseEndpoint(
 
 			case "remove":
 				epf = usersRemoveFlags
+
+			}
+
+		case "viron":
+			switch epn {
+			case "authtype":
+				epf = vironAuthtypeFlags
+
+			case "viron-menu":
+				epf = vironVironMenuFlags
+
+			}
+
+		case "secured":
+			switch epn {
+			case "signin":
+				epf = securedSigninFlags
 
 			}
 
@@ -156,6 +202,23 @@ func ParseEndpoint(
 			case "remove":
 				endpoint = c.Remove()
 				data, err = usersc.BuildRemovePayload(*usersRemoveIDFlag)
+			}
+		case "viron":
+			c := vironc.NewClient(scheme, host, doer, enc, dec, restore)
+			switch epn {
+			case "authtype":
+				endpoint = c.Authtype()
+				data = nil
+			case "viron-menu":
+				endpoint = c.VironMenu()
+				data = nil
+			}
+		case "secured":
+			c := securedc.NewClient(scheme, host, doer, enc, dec, restore)
+			switch epn {
+			case "signin":
+				endpoint = c.Signin()
+				data, err = securedc.BuildSigninPayload(*securedSigninUsernameFlag, *securedSigninPasswordFlag)
 			}
 		}
 	}
@@ -200,7 +263,7 @@ Show user by ID
     -id INT64: ID of user to show
 
 Example:
-    `+os.Args[0]+` users show --id 8943934585442295493
+    `+os.Args[0]+` users show --id 5539764536154362935
 `, os.Args[0])
 }
 
@@ -212,7 +275,7 @@ Add new user and return its ID.
 
 Example:
     `+os.Args[0]+` users add --body '{
-      "email": "Et voluptas neque voluptas doloribus.",
+      "email": "Consequuntur voluptas est quia cum asperiores eius.",
       "name": "hoge fuga"
    }'
 `, os.Args[0])
@@ -227,9 +290,9 @@ Update user item.
 
 Example:
     `+os.Args[0]+` users update --body '{
-      "email": "Magni nostrum doloribus accusantium enim.",
-      "name": "Sapiente recusandae."
-   }' --id 5746158754770524014
+      "email": "Nulla doloremque sed nulla omnis.",
+      "name": "Ex excepturi eos perspiciatis sit voluptatem."
+   }' --id 2376229461744035771
 `, os.Args[0])
 }
 
@@ -240,6 +303,65 @@ Remove user from storage
     -id INT64: ID of user to remove
 
 Example:
-    `+os.Args[0]+` users remove --id 6383285931504119743
+    `+os.Args[0]+` users remove --id 609566757397897271
+`, os.Args[0])
+}
+
+// vironUsage displays the usage of the viron command and its subcommands.
+func vironUsage() {
+	fmt.Fprintf(os.Stderr, `Service is the viron service interface.
+Usage:
+    %s [globalflags] viron COMMAND [flags]
+
+COMMAND:
+    authtype: Add viron_authtype
+    viron-menu: Add viron_menu
+
+Additional help:
+    %s viron COMMAND --help
+`, os.Args[0], os.Args[0])
+}
+func vironAuthtypeUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] viron authtype
+
+Add viron_authtype
+
+Example:
+    `+os.Args[0]+` viron authtype
+`, os.Args[0])
+}
+
+func vironVironMenuUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] viron viron-menu
+
+Add viron_menu
+
+Example:
+    `+os.Args[0]+` viron viron-menu
+`, os.Args[0])
+}
+
+// securedUsage displays the usage of the secured command and its subcommands.
+func securedUsage() {
+	fmt.Fprintf(os.Stderr, `The secured service exposes endpoints that require valid authorization credentials.
+Usage:
+    %s [globalflags] secured COMMAND [flags]
+
+COMMAND:
+    signin: Creates a valid JWT
+
+Additional help:
+    %s secured COMMAND --help
+`, os.Args[0], os.Args[0])
+}
+func securedSigninUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] secured signin -username STRING -password STRING
+
+Creates a valid JWT
+    -username STRING: Username used to perform signin
+    -password STRING: Password used to perform signin
+
+Example:
+    `+os.Args[0]+` secured signin --username "user" --password "password"
 `, os.Args[0])
 }

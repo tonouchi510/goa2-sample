@@ -13,9 +13,13 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	goa2sample "github.com/tonouchi510/goa2-sample/controllers"
+	securedsvr "github.com/tonouchi510/goa2-sample/gen/http/secured/server"
 	swaggersvr "github.com/tonouchi510/goa2-sample/gen/http/swagger/server"
 	userssvr "github.com/tonouchi510/goa2-sample/gen/http/users/server"
+	vironsvr "github.com/tonouchi510/goa2-sample/gen/http/viron/server"
+	secured "github.com/tonouchi510/goa2-sample/gen/secured"
 	users "github.com/tonouchi510/goa2-sample/gen/users"
+	viron "github.com/tonouchi510/goa2-sample/gen/viron"
 	goahttp "goa.design/goa/http"
 	"goa.design/goa/http/middleware"
 )
@@ -55,19 +59,27 @@ func main() {
 
 	// Create the structs that implement the services.
 	var (
-		usersSvc users.Service
+		usersSvc   users.Service
+		securedSvc secured.Service
+		vironSvc   viron.Service
 	)
 	{
 		usersSvc = goa2sample.NewUsers(logger, db)
+		securedSvc = goa2sample.NewSecured(logger)
+		vironSvc = goa2sample.NewViron(logger)
 	}
 
 	// Wrap the services in endpoints that can be invoked from other
 	// services potentially running in different processes.
 	var (
-		usersEndpoints *users.Endpoints
+		usersEndpoints   *users.Endpoints
+		securedEndpoints *secured.Endpoints
+		vironEndpoints   *viron.Endpoints
 	)
 	{
 		usersEndpoints = users.NewEndpoints(usersSvc)
+		securedEndpoints = secured.NewEndpoints(securedSvc)
+		vironEndpoints = viron.NewEndpoints(vironSvc)
 	}
 
 	// Provide the transport specific request decoder and response encoder.
@@ -93,15 +105,21 @@ func main() {
 	var (
 		usersServer   *userssvr.Server
 		swaggerServer *swaggersvr.Server
+		securedServer *securedsvr.Server
+		vironServer   *vironsvr.Server
 	)
 	{
 		eh := ErrorHandler(logger)
 		usersServer = userssvr.New(usersEndpoints, mux, dec, enc, eh)
 		swaggerServer = swaggersvr.New(nil, mux, dec, enc, eh)
+		securedServer = securedsvr.New(securedEndpoints, mux, dec, enc, eh)
+		vironServer = vironsvr.New(vironEndpoints, mux, dec, enc, eh)
 	}
 	// Configure the mux.
 	userssvr.Mount(mux, usersServer)
 	swaggersvr.Mount(mux, swaggerServer)
+	securedsvr.Mount(mux, securedServer)
+	vironsvr.Mount(mux, vironServer)
 
 	// Wrap the multiplexer with additional middlewares. Middlewares mounted
 	// here apply to all the service endpoints.
@@ -132,6 +150,12 @@ func main() {
 			logger.Printf("method %q mounted on %s %s", m.Method, m.Verb, m.Pattern)
 		}
 		for _, m := range swaggerServer.Mounts {
+			logger.Printf("file %q mounted on %s %s", m.Method, m.Verb, m.Pattern)
+		}
+		for _, m := range securedServer.Mounts {
+			logger.Printf("method %q mounted on %s %s", m.Method, m.Verb, m.Pattern)
+		}
+		for _, m := range vironServer.Mounts {
 			logger.Printf("file %q mounted on %s %s", m.Method, m.Verb, m.Pattern)
 		}
 		logger.Printf("listening on %s", *addr)

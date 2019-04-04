@@ -12,7 +12,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	goa2sample "github.com/tonouchi510/goa2-sample/controllers"
+	goa2sample "github.com/tonouchi510/goa2-sample/controller"
 	securedsvr "github.com/tonouchi510/goa2-sample/gen/http/secured/server"
 	statssvr "github.com/tonouchi510/goa2-sample/gen/http/stats/server"
 	swaggersvr "github.com/tonouchi510/goa2-sample/gen/http/swagger/server"

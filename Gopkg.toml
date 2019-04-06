@@ -24,15 +24,19 @@
 #   go-tests = true
 #   unused-packages = true
 
-required = ["goa.design/goa/codegen/generator"]
-
-[[constraint]]
-  branch = "master"
-  name = "goa.design/goa"
-
-[[constraint]]
-  branch = "master"
-  name = "goa.design/plugins"
+ignored = [
+    "goa.design/goa",
+    "goa.design/goa/codegen",
+    "goa.design/goa/codegen/service",
+    "goa.design/goa/dsl",
+    "goa.design/goa/eval",
+    "goa.design/goa/expr",
+    "goa.design/goa/http",
+    "goa.design/goa/http/codegen",
+    "goa.design/goa/http/middleware",
+    "goa.design/goa/middleware",
+    "goa.design/goa/security",
+]
 
 [prune]
   go-tests = true

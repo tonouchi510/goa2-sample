@@ -4,22 +4,22 @@ import (
 	"context"
 	"log"
 
-	"github.com/tonouchi510/goa2-sample/gen/viron"
+	viron "github.com/tonouchi510/goa2-sample/gen/viron"
 )
 
-// viron service example implementation.
+// Viron service example implementation.
 // The example methods log the requests and return zero values.
-type vironSvc struct {
+type vironsrvc struct {
 	logger *log.Logger
 }
 
-// NewViron returns the viron service implementation.
+// NewViron returns the Viron service implementation.
 func NewViron(logger *log.Logger) viron.Service {
-	return &vironSvc{logger}
+	return &vironsrvc{logger}
 }
 
 // Add viron_authtype
-func (s *vironSvc) Authtype(ctx context.Context) (res viron.VironAuthtypeCollection, err error) {
+func (s *vironsrvc) Authtype(ctx context.Context) (res viron.VironAuthtypeCollection, err error) {
 	s.logger.Print("viron.authtype")
 	res = viron.VironAuthtypeCollection{
 		&viron.VironAuthtype{
@@ -39,11 +39,9 @@ func (s *vironSvc) Authtype(ctx context.Context) (res viron.VironAuthtypeCollect
 }
 
 // Add viron_menu
-func (s *vironSvc) VironMenu(ctx context.Context) (res *viron.VironMenu, err error) {
+func (s *vironsrvc) VironMenu(ctx context.Context) (res *viron.VironMenu, err error) {
 	res = &viron.VironMenu{}
 	s.logger.Print("viron.viron_menu")
-
-
 	cl := "green"
 	th := "standard"
 	pk := "id"
@@ -66,7 +64,7 @@ func (s *vironSvc) VironMenu(ctx context.Context) (res *viron.VironMenu, err err
 						Name:    "Users(bar)",
 						API: &viron.VironAPI{
 							Method: "get",
-							Path:   "/api/v1/stats/user_number",
+							Path:   "/api/v1/admin/user_number",
 						},
 						Style: "graph-bar",
 					},
@@ -80,7 +78,7 @@ func (s *vironSvc) VironMenu(ctx context.Context) (res *viron.VironMenu, err err
 					&viron.VironComponent{
 						API: &viron.VironAPI{
 							Method: "get",
-							Path:   "/api/v1/users",
+							Path:   "/api/v1/admin/users",
 						},
 						Name:       "ユーザ一覧",
 						Style:      "table",
@@ -99,11 +97,21 @@ func (s *vironSvc) VironMenu(ctx context.Context) (res *viron.VironMenu, err err
 								Key:  "email",
 								Type: "string",
 							},
+							&viron.VironQuery{
+								Key:  "created_at",
+								Type: "string",
+							},
+							&viron.VironQuery{
+								Key:  "updated_at",
+								Type: "string",
+							},
 						},
 						TableLabels: []string{
 							"id",
 							"name",
 							"email",
+							"created_at",
+							"updated_at",
 						},
 					},
 				},

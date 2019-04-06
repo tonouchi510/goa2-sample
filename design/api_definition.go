@@ -27,10 +27,10 @@ var _ = API("goa2-sample", func() {
 	})
 
 	Server("goa2-sample", func() {
-		Services("users", "swagger", "secured", "viron", "stats")
+		Services("Users", "Viron", "Admin")
 		Host("localhost", func() {
 			Description("development host")
-			URI("http://localhost:8000")
+			URI("http://localhost:8080")
 		})
 	})
 })

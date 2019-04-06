@@ -1,8 +1,6 @@
 APP_NAME := goa2_sample
-GOP := /Users/masato.tonochi/go/my-project
 REPO := github.com/tonouchi510/goa2-sample
-BACKUP := bak
-ARG = db
+SWAGGER_DIR := ./server/swagger-ui/swagger/
 
 # 環境構築
 install:
@@ -17,26 +15,22 @@ all: docker-build docker-up run
 # goa関連
 goagen:
 	@goa gen $(REPO)/design
-	@rm -rf $(BACKUP)/*
-	@mv -f cmd bak
-	@mv -f controllers/* ./
+	@cp -f ./gen/http/openapi.json ${SWAGGER_DIR}
+	@cp -f ./gen/http/openapi.yaml ${SWAGGER_DIR}
+
+regen:
+	@rm -rf ./cmd
 	@goa example $(REPO)/design
-	@mv -f *.go controllers/
-	@find ./controllers/*.go | xargs sed -i '' 's|package goa2sample|package controllers|g'
-	@sed -i '' 's|goa2sample "$(REPO)"|goa2sample "$(REPO)/controllers"|g' cmd/$(APP_NAME)/main.go
-	@sed -i '' 's|swaggersvr.Mount(mux)|swaggersvr.Mount(mux, swaggerServer)|g' cmd/$(APP_NAME)/main.go
+	@mv -n *.go controller/
+	@./script/fix-goagen-source.sh controller ${REPO} ${APP_NAME}
 
 run:
 	@cd cmd/$(APP_NAME) && go build
-	@cd cmd/$(APP_NAME) && ./$(APP_NAME)
-
-run-cli:
-	@cd cmd/$(APP_NAME)-cli && go build
+	@./cmd/$(APP_NAME)/$(APP_NAME)
 
 clean:
 	@rm -rf cmd/
 	@rm -rf gen/
-	@rm ./*.go
 
 
 # docker用 Makefile
@@ -55,6 +49,3 @@ docker-ps:
 docker-rm:
 	@docker-compose stop
 	@docker-compose rm -f
-
-exec:
-	docker-compose exec $(ARG) bash

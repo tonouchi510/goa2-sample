@@ -13,8 +13,7 @@ import (
 	"net/http"
 	"os"
 
-	securedc "github.com/tonouchi510/goa2-sample/gen/http/secured/client"
-	statsc "github.com/tonouchi510/goa2-sample/gen/http/stats/client"
+	adminc "github.com/tonouchi510/goa2-sample/gen/http/admin/client"
 	usersc "github.com/tonouchi510/goa2-sample/gen/http/users/client"
 	vironc "github.com/tonouchi510/goa2-sample/gen/http/viron/client"
 	goa "goa.design/goa"
@@ -26,19 +25,17 @@ import (
 //    command (subcommand1|subcommand2|...)
 //
 func UsageCommands() string {
-	return `stats user-number
-users (list|show|add|update|remove)
+	return `admin (user-number|admin list user|admin get user|admin create user|admin update user|admin delete user)
+users (list user|get user|create user|update user|delete user)
 viron (authtype|viron-menu)
-secured signin
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` stats user-number` + "\n" +
-		os.Args[0] + ` users list` + "\n" +
+	return os.Args[0] + ` admin user-number` + "\n" +
+		os.Args[0] + ` users list user` + "\n" +
 		os.Args[0] + ` viron authtype` + "\n" +
-		os.Args[0] + ` secured signin --username "user" --password "password"` + "\n" +
 		""
 }
 
@@ -52,61 +49,72 @@ func ParseEndpoint(
 	restore bool,
 ) (goa.Endpoint, interface{}, error) {
 	var (
-		statsFlags = flag.NewFlagSet("stats", flag.ContinueOnError)
+		adminFlags = flag.NewFlagSet("admin", flag.ContinueOnError)
 
-		statsUserNumberFlags = flag.NewFlagSet("user-number", flag.ExitOnError)
+		adminUserNumberFlags = flag.NewFlagSet("user-number", flag.ExitOnError)
+
+		adminAdminListUserFlags = flag.NewFlagSet("admin list user", flag.ExitOnError)
+
+		adminAdminGetUserFlags  = flag.NewFlagSet("admin get user", flag.ExitOnError)
+		adminAdminGetUserIDFlag = adminAdminGetUserFlags.String("id", "REQUIRED", "")
+
+		adminAdminCreateUserFlags    = flag.NewFlagSet("admin create user", flag.ExitOnError)
+		adminAdminCreateUserBodyFlag = adminAdminCreateUserFlags.String("body", "REQUIRED", "")
+
+		adminAdminUpdateUserFlags    = flag.NewFlagSet("admin update user", flag.ExitOnError)
+		adminAdminUpdateUserBodyFlag = adminAdminUpdateUserFlags.String("body", "REQUIRED", "")
+		adminAdminUpdateUserIDFlag   = adminAdminUpdateUserFlags.String("id", "REQUIRED", "User id")
+
+		adminAdminDeleteUserFlags  = flag.NewFlagSet("admin delete user", flag.ExitOnError)
+		adminAdminDeleteUserIDFlag = adminAdminDeleteUserFlags.String("id", "REQUIRED", "")
 
 		usersFlags = flag.NewFlagSet("users", flag.ContinueOnError)
 
-		usersListFlags = flag.NewFlagSet("list", flag.ExitOnError)
+		usersListUserFlags = flag.NewFlagSet("list user", flag.ExitOnError)
 
-		usersShowFlags  = flag.NewFlagSet("show", flag.ExitOnError)
-		usersShowIDFlag = usersShowFlags.String("id", "REQUIRED", "ID of user to show")
+		usersGetUserFlags  = flag.NewFlagSet("get user", flag.ExitOnError)
+		usersGetUserIDFlag = usersGetUserFlags.String("id", "REQUIRED", "")
 
-		usersAddFlags    = flag.NewFlagSet("add", flag.ExitOnError)
-		usersAddBodyFlag = usersAddFlags.String("body", "REQUIRED", "")
+		usersCreateUserFlags    = flag.NewFlagSet("create user", flag.ExitOnError)
+		usersCreateUserBodyFlag = usersCreateUserFlags.String("body", "REQUIRED", "")
 
-		usersUpdateFlags    = flag.NewFlagSet("update", flag.ExitOnError)
-		usersUpdateBodyFlag = usersUpdateFlags.String("body", "REQUIRED", "")
-		usersUpdateIDFlag   = usersUpdateFlags.String("id", "REQUIRED", "ID of user to show")
+		usersUpdateUserFlags    = flag.NewFlagSet("update user", flag.ExitOnError)
+		usersUpdateUserBodyFlag = usersUpdateUserFlags.String("body", "REQUIRED", "")
+		usersUpdateUserIDFlag   = usersUpdateUserFlags.String("id", "REQUIRED", "User id")
 
-		usersRemoveFlags  = flag.NewFlagSet("remove", flag.ExitOnError)
-		usersRemoveIDFlag = usersRemoveFlags.String("id", "REQUIRED", "ID of user to remove")
+		usersDeleteUserFlags  = flag.NewFlagSet("delete user", flag.ExitOnError)
+		usersDeleteUserIDFlag = usersDeleteUserFlags.String("id", "REQUIRED", "")
 
 		vironFlags = flag.NewFlagSet("viron", flag.ContinueOnError)
 
 		vironAuthtypeFlags = flag.NewFlagSet("authtype", flag.ExitOnError)
 
 		vironVironMenuFlags = flag.NewFlagSet("viron-menu", flag.ExitOnError)
-
-		securedFlags = flag.NewFlagSet("secured", flag.ContinueOnError)
-
-		securedSigninFlags        = flag.NewFlagSet("signin", flag.ExitOnError)
-		securedSigninUsernameFlag = securedSigninFlags.String("username", "REQUIRED", "Username used to perform signin")
-		securedSigninPasswordFlag = securedSigninFlags.String("password", "REQUIRED", "Password used to perform signin")
 	)
-	statsFlags.Usage = statsUsage
-	statsUserNumberFlags.Usage = statsUserNumberUsage
+	adminFlags.Usage = adminUsage
+	adminUserNumberFlags.Usage = adminUserNumberUsage
+	adminAdminListUserFlags.Usage = adminAdminListUserUsage
+	adminAdminGetUserFlags.Usage = adminAdminGetUserUsage
+	adminAdminCreateUserFlags.Usage = adminAdminCreateUserUsage
+	adminAdminUpdateUserFlags.Usage = adminAdminUpdateUserUsage
+	adminAdminDeleteUserFlags.Usage = adminAdminDeleteUserUsage
 
 	usersFlags.Usage = usersUsage
-	usersListFlags.Usage = usersListUsage
-	usersShowFlags.Usage = usersShowUsage
-	usersAddFlags.Usage = usersAddUsage
-	usersUpdateFlags.Usage = usersUpdateUsage
-	usersRemoveFlags.Usage = usersRemoveUsage
+	usersListUserFlags.Usage = usersListUserUsage
+	usersGetUserFlags.Usage = usersGetUserUsage
+	usersCreateUserFlags.Usage = usersCreateUserUsage
+	usersUpdateUserFlags.Usage = usersUpdateUserUsage
+	usersDeleteUserFlags.Usage = usersDeleteUserUsage
 
 	vironFlags.Usage = vironUsage
 	vironAuthtypeFlags.Usage = vironAuthtypeUsage
 	vironVironMenuFlags.Usage = vironVironMenuUsage
 
-	securedFlags.Usage = securedUsage
-	securedSigninFlags.Usage = securedSigninUsage
-
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
 	}
 
-	if len(os.Args) < flag.NFlag()+3 {
+	if flag.NArg() < 2 { // two non flag args are required: SERVICE and ENDPOINT (aka COMMAND)
 		return nil, nil, fmt.Errorf("not enough arguments")
 	}
 
@@ -115,21 +123,19 @@ func ParseEndpoint(
 		svcf *flag.FlagSet
 	)
 	{
-		svcn = os.Args[1+flag.NFlag()]
+		svcn = flag.Arg(0)
 		switch svcn {
-		case "stats":
-			svcf = statsFlags
+		case "admin":
+			svcf = adminFlags
 		case "users":
 			svcf = usersFlags
 		case "viron":
 			svcf = vironFlags
-		case "secured":
-			svcf = securedFlags
 		default:
 			return nil, nil, fmt.Errorf("unknown service %q", svcn)
 		}
 	}
-	if err := svcf.Parse(os.Args[2+flag.NFlag():]); err != nil {
+	if err := svcf.Parse(flag.Args()[1:]); err != nil {
 		return nil, nil, err
 	}
 
@@ -138,31 +144,46 @@ func ParseEndpoint(
 		epf *flag.FlagSet
 	)
 	{
-		epn = os.Args[2+flag.NFlag()+svcf.NFlag()]
+		epn = svcf.Arg(0)
 		switch svcn {
-		case "stats":
+		case "admin":
 			switch epn {
 			case "user-number":
-				epf = statsUserNumberFlags
+				epf = adminUserNumberFlags
+
+			case "admin list user":
+				epf = adminAdminListUserFlags
+
+			case "admin get user":
+				epf = adminAdminGetUserFlags
+
+			case "admin create user":
+				epf = adminAdminCreateUserFlags
+
+			case "admin update user":
+				epf = adminAdminUpdateUserFlags
+
+			case "admin delete user":
+				epf = adminAdminDeleteUserFlags
 
 			}
 
 		case "users":
 			switch epn {
-			case "list":
-				epf = usersListFlags
+			case "list user":
+				epf = usersListUserFlags
 
-			case "show":
-				epf = usersShowFlags
+			case "get user":
+				epf = usersGetUserFlags
 
-			case "add":
-				epf = usersAddFlags
+			case "create user":
+				epf = usersCreateUserFlags
 
-			case "update":
-				epf = usersUpdateFlags
+			case "update user":
+				epf = usersUpdateUserFlags
 
-			case "remove":
-				epf = usersRemoveFlags
+			case "delete user":
+				epf = usersDeleteUserFlags
 
 			}
 
@@ -176,13 +197,6 @@ func ParseEndpoint(
 
 			}
 
-		case "secured":
-			switch epn {
-			case "signin":
-				epf = securedSigninFlags
-
-			}
-
 		}
 	}
 	if epf == nil {
@@ -190,8 +204,8 @@ func ParseEndpoint(
 	}
 
 	// Parse endpoint flags if any
-	if len(os.Args) > 2+flag.NFlag()+svcf.NFlag() {
-		if err := epf.Parse(os.Args[3+flag.NFlag()+svcf.NFlag():]); err != nil {
+	if svcf.NArg() > 1 {
+		if err := epf.Parse(svcf.Args()[1:]); err != nil {
 			return nil, nil, err
 		}
 	}
@@ -203,31 +217,46 @@ func ParseEndpoint(
 	)
 	{
 		switch svcn {
-		case "stats":
-			c := statsc.NewClient(scheme, host, doer, enc, dec, restore)
+		case "admin":
+			c := adminc.NewClient(scheme, host, doer, enc, dec, restore)
 			switch epn {
 			case "user-number":
 				endpoint = c.UserNumber()
 				data = nil
+			case "admin list user":
+				endpoint = c.AdminListUser()
+				data = nil
+			case "admin get user":
+				endpoint = c.AdminGetUser()
+				data, err = adminc.BuildAdminGetUserPayload(*adminAdminGetUserIDFlag)
+			case "admin create user":
+				endpoint = c.AdminCreateUser()
+				data, err = adminc.BuildAdminCreateUserPayload(*adminAdminCreateUserBodyFlag)
+			case "admin update user":
+				endpoint = c.AdminUpdateUser()
+				data, err = adminc.BuildAdminUpdateUserPayload(*adminAdminUpdateUserBodyFlag, *adminAdminUpdateUserIDFlag)
+			case "admin delete user":
+				endpoint = c.AdminDeleteUser()
+				data, err = adminc.BuildAdminDeleteUserPayload(*adminAdminDeleteUserIDFlag)
 			}
 		case "users":
 			c := usersc.NewClient(scheme, host, doer, enc, dec, restore)
 			switch epn {
-			case "list":
-				endpoint = c.List()
+			case "list user":
+				endpoint = c.ListUser()
 				data = nil
-			case "show":
-				endpoint = c.Show()
-				data, err = usersc.BuildShowPayload(*usersShowIDFlag)
-			case "add":
-				endpoint = c.Add()
-				data, err = usersc.BuildAddPayload(*usersAddBodyFlag)
-			case "update":
-				endpoint = c.Update()
-				data, err = usersc.BuildUpdatePayload(*usersUpdateBodyFlag, *usersUpdateIDFlag)
-			case "remove":
-				endpoint = c.Remove()
-				data, err = usersc.BuildRemovePayload(*usersRemoveIDFlag)
+			case "get user":
+				endpoint = c.GetUser()
+				data, err = usersc.BuildGetUserPayload(*usersGetUserIDFlag)
+			case "create user":
+				endpoint = c.CreateUser()
+				data, err = usersc.BuildCreateUserPayload(*usersCreateUserBodyFlag)
+			case "update user":
+				endpoint = c.UpdateUser()
+				data, err = usersc.BuildUpdateUserPayload(*usersUpdateUserBodyFlag, *usersUpdateUserIDFlag)
+			case "delete user":
+				endpoint = c.DeleteUser()
+				data, err = usersc.BuildDeleteUserPayload(*usersDeleteUserIDFlag)
 			}
 		case "viron":
 			c := vironc.NewClient(scheme, host, doer, enc, dec, restore)
@@ -239,13 +268,6 @@ func ParseEndpoint(
 				endpoint = c.VironMenu()
 				data = nil
 			}
-		case "secured":
-			c := securedc.NewClient(scheme, host, doer, enc, dec, restore)
-			switch epn {
-			case "signin":
-				endpoint = c.Signin()
-				data, err = securedc.BuildSigninPayload(*securedSigninUsernameFlag, *securedSigninPasswordFlag)
-			}
 		}
 	}
 	if err != nil {
@@ -255,110 +277,178 @@ func ParseEndpoint(
 	return endpoint, data, nil
 }
 
-// statsUsage displays the usage of the stats command and its subcommands.
-func statsUsage() {
-	fmt.Fprintf(os.Stderr, `Stats describes stats information of this services
+// adminUsage displays the usage of the admin command and its subcommands.
+func adminUsage() {
+	fmt.Fprintf(os.Stderr, `Admin provide functions for the management screen.
 Usage:
-    %s [globalflags] stats COMMAND [flags]
+    %s [globalflags] admin COMMAND [flags]
 
 COMMAND:
-    user-number: Users Information
+    user-number: Number of users
+    admin list user: List all stored users
+    admin get user: Show user by ID
+    admin create user: Add new user and return its ID.
+    admin update user: Update user item.
+    admin delete user: Delete user by id.
 
 Additional help:
-    %s stats COMMAND --help
+    %s admin COMMAND --help
 `, os.Args[0], os.Args[0])
 }
-func statsUserNumberUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] stats user-number
+func adminUserNumberUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] admin user-number
 
-Users Information
+Number of users
 
 Example:
-    `+os.Args[0]+` stats user-number
+    `+os.Args[0]+` admin user-number
 `, os.Args[0])
 }
 
-// usersUsage displays the usage of the users command and its subcommands.
-func usersUsage() {
-	fmt.Fprintf(os.Stderr, `users serves user relative information.
-Usage:
-    %s [globalflags] users COMMAND [flags]
-
-COMMAND:
-    list: List all stored users
-    show: Show user by ID
-    add: Add new user and return its ID.
-    update: Update user item.
-    remove: Remove user from storage
-
-Additional help:
-    %s users COMMAND --help
-`, os.Args[0], os.Args[0])
-}
-func usersListUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] users list
+func adminAdminListUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] admin admin list user
 
 List all stored users
 
 Example:
-    `+os.Args[0]+` users list
+    `+os.Args[0]+` admin admin list user
 `, os.Args[0])
 }
 
-func usersShowUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] users show -id INT64
+func adminAdminGetUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] admin admin get user -id STRING
 
 Show user by ID
-    -id INT64: ID of user to show
+    -id STRING: 
 
 Example:
-    `+os.Args[0]+` users show --id 8884525023437309669
+    `+os.Args[0]+` admin admin get user --id "Delectus quia omnis ratione cum quo illum."
 `, os.Args[0])
 }
 
-func usersAddUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] users add -body JSON
+func adminAdminCreateUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] admin admin create user -body JSON
 
 Add new user and return its ID.
     -body JSON: 
 
 Example:
-    `+os.Args[0]+` users add --body '{
-      "email": "Vel est eius dolorem delectus sit.",
-      "name": "hoge fuga"
+    `+os.Args[0]+` admin admin create user --body '{
+      "email": "Mollitia consequuntur consequatur velit non.",
+      "id": "XRQ85mtXnINISH25zfM0m5RlC6L2",
+      "name": "Praesentium consequatur aperiam sint ut ea."
    }'
 `, os.Args[0])
 }
 
-func usersUpdateUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] users update -body JSON -id INT64
+func adminAdminUpdateUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] admin admin update user -body JSON -id STRING
 
 Update user item.
     -body JSON: 
-    -id INT64: ID of user to show
+    -id STRING: User id
 
 Example:
-    `+os.Args[0]+` users update --body '{
-      "email": "Voluptas dolore culpa.",
-      "name": "Minima ut porro velit nihil."
-   }' --id 4273093035653800417
+    `+os.Args[0]+` admin admin update user --body '{
+      "email": "Praesentium tenetur.",
+      "name": "Id dicta voluptatem."
+   }' --id "XRQ85mtXnINISH25zfM0m5RlC6L2"
 `, os.Args[0])
 }
 
-func usersRemoveUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] users remove -id INT64
+func adminAdminDeleteUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] admin admin delete user -id STRING
 
-Remove user from storage
-    -id INT64: ID of user to remove
+Delete user by id.
+    -id STRING: 
 
 Example:
-    `+os.Args[0]+` users remove --id 770662433331218172
+    `+os.Args[0]+` admin admin delete user --id "Itaque consequuntur voluptatum ab iure."
+`, os.Args[0])
+}
+
+// usersUsage displays the usage of the users command and its subcommands.
+func usersUsage() {
+	fmt.Fprintf(os.Stderr, `users serves user account relative information.
+Usage:
+    %s [globalflags] users COMMAND [flags]
+
+COMMAND:
+    list user: List all stored users
+    get user: Show user by ID
+    create user: Add new user and return its ID.
+    update user: Update user item.
+    delete user: Delete user by id.
+
+Additional help:
+    %s users COMMAND --help
+`, os.Args[0], os.Args[0])
+}
+func usersListUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] users list user
+
+List all stored users
+
+Example:
+    `+os.Args[0]+` users list user
+`, os.Args[0])
+}
+
+func usersGetUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] users get user -id STRING
+
+Show user by ID
+    -id STRING: 
+
+Example:
+    `+os.Args[0]+` users get user --id "Fugit et omnis voluptatibus quibusdam necessitatibus quae."
+`, os.Args[0])
+}
+
+func usersCreateUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] users create user -body JSON
+
+Add new user and return its ID.
+    -body JSON: 
+
+Example:
+    `+os.Args[0]+` users create user --body '{
+      "email": "Id nulla adipisci qui nisi culpa.",
+      "id": "XRQ85mtXnINISH25zfM0m5RlC6L2",
+      "name": "Voluptatem rerum sed suscipit aut."
+   }'
+`, os.Args[0])
+}
+
+func usersUpdateUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] users update user -body JSON -id STRING
+
+Update user item.
+    -body JSON: 
+    -id STRING: User id
+
+Example:
+    `+os.Args[0]+` users update user --body '{
+      "email": "Repellat minus id.",
+      "name": "Debitis harum non pariatur dolore possimus non."
+   }' --id "XRQ85mtXnINISH25zfM0m5RlC6L2"
+`, os.Args[0])
+}
+
+func usersDeleteUserUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] users delete user -id STRING
+
+Delete user by id.
+    -id STRING: 
+
+Example:
+    `+os.Args[0]+` users delete user --id "Dolor voluptas mollitia culpa."
 `, os.Args[0])
 }
 
 // vironUsage displays the usage of the viron command and its subcommands.
 func vironUsage() {
-	fmt.Fprintf(os.Stderr, `Service is the viron service interface.
+	fmt.Fprintf(os.Stderr, `Service is the Viron service interface.
 Usage:
     %s [globalflags] viron COMMAND [flags]
 
@@ -387,30 +477,5 @@ Add viron_menu
 
 Example:
     `+os.Args[0]+` viron viron-menu
-`, os.Args[0])
-}
-
-// securedUsage displays the usage of the secured command and its subcommands.
-func securedUsage() {
-	fmt.Fprintf(os.Stderr, `The secured service exposes endpoints that require valid authorization credentials.
-Usage:
-    %s [globalflags] secured COMMAND [flags]
-
-COMMAND:
-    signin: Creates a valid JWT
-
-Additional help:
-    %s secured COMMAND --help
-`, os.Args[0], os.Args[0])
-}
-func securedSigninUsage() {
-	fmt.Fprintf(os.Stderr, `%s [flags] secured signin -username STRING -password STRING
-
-Creates a valid JWT
-    -username STRING: Username used to perform signin
-    -password STRING: Password used to perform signin
-
-Example:
-    `+os.Args[0]+` secured signin --username "user" --password "password"
 `, os.Args[0])
 }

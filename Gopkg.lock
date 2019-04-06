@@ -2,22 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  digest = "1:376e5a9fdb57657725ff19b4c510c3f5e1f804ab4ab0ff3064d8f4dc01e40fe2"
-  name = "github.com/dimfeld/httppath"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "ee938bf735983d53694d79138ad9820efff94c92"
-
-[[projects]]
-  digest = "1:09d3ceb4456b0b463c5730198a9138e383089b27c0c10b1032789a0618a6dfe6"
-  name = "github.com/dimfeld/httptreemux"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "a454a10de4a11f751681a0914461ab9e98c2a3ff"
-  version = "5.0.2"
-
-[[projects]]
   digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
@@ -26,61 +10,8 @@
   version = "v1.4.1"
 
 [[projects]]
-  digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
-  name = "github.com/gorilla/websocket"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
-  version = "v1.4.0"
-
-[[projects]]
   branch = "master"
-  digest = "1:393f23e872c9141dbe315c428dc3eac9406f029be7ab0e1cae2374486c07aa54"
-  name = "github.com/manveru/faker"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "9fbc68a78c4dbc7914e1a23f88f126bea4383b97"
-
-[[projects]]
-  digest = "1:d917313f309bda80d27274d53985bc65651f81a5b66b820749ac7f8ef061fd04"
-  name = "github.com/sergi/go-diff"
-  packages = ["diffmatchpatch"]
-  pruneopts = "UT"
-  revision = "1744e2970ca51c86172c8190fadad617561ed6e7"
-  version = "v1.0.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:6f7f5a5452e6dc8b0665b0fd2b779c3c6b7e70a121e0661aeb03daef7baae58d"
-  name = "github.com/zach-klippenstein/goregen"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "795b5e3961ea1912fde60af417ad85e86acc0d6a"
-
-[[projects]]
-  branch = "master"
-  digest = "1:19a39de8cd89eee295286812509e4764d4186c74c8518e6240c8f22acdae3562"
-  name = "goa.design/goa"
-  packages = [
-    ".",
-    "codegen",
-    "codegen/generator",
-    "codegen/service",
-    "dsl",
-    "eval",
-    "expr",
-    "http",
-    "http/codegen",
-    "http/codegen/openapi",
-    "http/middleware",
-    "pkg",
-  ]
-  pruneopts = "UT"
-  revision = "ceb0bde7d0c58196078b647002b2fdf0f55587db"
-
-[[projects]]
-  branch = "master"
-  digest = "1:d95981cd6be00fab92716fa066b171e5bbad15f769c912d0cc854b7d8c39cc05"
+  digest = "1:65a1fbebcfe7cc0e70dafc7f5aa4d5b81e220f0008e4490a0ac3a1547962a973"
   name = "goa.design/plugins"
   packages = [
     "cors",
@@ -88,55 +19,21 @@
     "cors/expr",
   ]
   pruneopts = "UT"
-  revision = "0641a9b7482cea5303951506bd3189d2896d2eda"
-
-[[projects]]
-  branch = "master"
-  digest = "1:b7ef5af07b9421973508acd2a12e1d82d948357b0a584962ed5f5dbf6bd90681"
-  name = "golang.org/x/tools"
-  packages = [
-    "go/ast/astutil",
-    "go/gcexportdata",
-    "go/internal/cgo",
-    "go/internal/gcimporter",
-    "go/internal/packagesdriver",
-    "go/packages",
-    "go/types/typeutil",
-    "imports",
-    "internal/fastwalk",
-    "internal/gopathwalk",
-    "internal/semver",
-  ]
-  pruneopts = "UT"
-  revision = "d00ac6d27372a4273825635281f2dc360d4be563"
+  revision = "e801dd66f79fd62f4ee885d4d1b66e187f584b2c"
 
 [[projects]]
   digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
   name = "google.golang.org/appengine"
   packages = ["cloudsql"]
   pruneopts = "UT"
-  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
-  version = "v1.4.0"
-
-[[projects]]
-  digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
-  name = "gopkg.in/yaml.v2"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
-  version = "v2.2.2"
+  revision = "54a98f90d1c46b7731eb8fb305d2a321c30ef610"
+  version = "v1.5.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/go-sql-driver/mysql",
-    "goa.design/goa",
-    "goa.design/goa/codegen/generator",
-    "goa.design/goa/dsl",
-    "goa.design/goa/http",
-    "goa.design/goa/http/middleware",
-    "goa.design/plugins/cors",
     "goa.design/plugins/cors/dsl",
   ]
   solver-name = "gps-cdcl"

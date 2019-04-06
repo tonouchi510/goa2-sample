@@ -6,7 +6,7 @@ import (
 
 // レスポンスデータの定義
 // MediaType of Users API.
-var UserResponse = ResultType("application/vnd.goa2-sample.user", func() {
+var UserResponse = ResultType("application/vnd.goa2-sample.user+json", func() {
 	Description("User Response")
 	ContentType("application/json")
 
@@ -28,7 +28,7 @@ var UserResponse = ResultType("application/vnd.goa2-sample.user", func() {
 
 
 // MediaType of Admin API.
-var UserStatsResponse = ResultType("application/vnd.goa2-sample.admin.user_number+json", func() {
+var AdminUserStatsResponse = ResultType("application/vnd.goa2-sample.admin.user_number+json", func() {
 	Description("statistic of users")
 	ContentType("application/json")
 
@@ -41,6 +41,32 @@ var UserStatsResponse = ResultType("application/vnd.goa2-sample.admin.user_numbe
 		Attribute("guide", GuideType)
 
 		Required("data", "x", "y", "guide")
+	})
+})
+
+var AdminUserResponse = ResultType("application/vnd.goa2-sample.admin.user+json", func() {
+	Description("User Response")
+	ContentType("application/json")
+
+	Reference(User)
+	Attributes(func() {
+		Attribute("id")
+		Attribute("name")
+		Attribute("email")
+		Attribute("created_at", String)
+		Attribute("updated_at", String)
+		Attribute("deleted_at", String)
+
+		Required("id", "name", "email", "created_at", "updated_at")
+	})
+
+	View("default", func() {
+		Attribute("id")
+		Attribute("name")
+		Attribute("email")
+		Attribute("created_at")
+		Attribute("updated_at")
+		Attribute("deleted_at")
 	})
 })
 

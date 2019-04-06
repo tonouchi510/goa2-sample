@@ -12,7 +12,7 @@ var _ = Service("Users", func() {
 		Path("/api/v1/users")
 	})
 
-	Method("List", func() {
+	Method("list user", func() {
 		Description("List all stored users")
 
 		Result(CollectionOf(UserResponse))
@@ -22,7 +22,7 @@ var _ = Service("Users", func() {
 		})
 	})
 
-	Method("Get", func() {
+	Method("get user", func() {
 		Description("Show user by ID")
 
 		Payload(GetUserPayload)
@@ -34,7 +34,7 @@ var _ = Service("Users", func() {
 		})
 	})
 
-	Method("Create", func() {
+	Method("create user", func() {
 		Description("Add new user and return its ID.")
 
 		Payload(CreateUserPayload)
@@ -46,7 +46,7 @@ var _ = Service("Users", func() {
 		})
 	})
 
-	Method("Update", func() {
+	Method("update user", func() {
 		Description("Update user item.")
 		Payload(UpdateUserPayload)
 		Result(UserResponse)
@@ -56,7 +56,7 @@ var _ = Service("Users", func() {
 		})
 	})
 
-	Method("Delete", func() {
+	Method("delete user", func() {
 		Description("Delete user by id.")
 		Payload(DeleteUserPayload)
 		HTTP(func() {

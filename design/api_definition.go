@@ -21,6 +21,7 @@ var _ = API("goa2-sample", func() {
 	})
 
 	cors.Origin("/.*localhost.*/", func() {
+		cors.Headers("authorization, content-type")
 		cors.Methods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 		cors.MaxAge(600)
 	})
